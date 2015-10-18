@@ -89,32 +89,3 @@ a.desc:after {
     padding: 10px 20px;
     margin: 0 0 15px 0;
 }
-
-:-webkit-full-screen a {
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex
-}
-
-:-moz-full-screen a {
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex
-}
-
-:-ms-fullscreen a {
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex
-}
-
-:fullscreen a {
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    font-family: Arial;
-    font-style: italic;
-    font-size: 14px;
-    line-height: 18px; 
-    font-weight: bold;
-}
