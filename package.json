@@ -1,0 +1,28 @@
+{
+  "name": "todolist.pe",
+  "version": "0.0.0",
+  "description": "Yii 2 Basic Project Template ============================",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "grunt": "~0.4.5"
+  },
+  "devDependencies": {
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-autoprefixer": "~3.0.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tearina/todolist.git"
+  },
+  "author": "Kate <9zink9@gmail.com>",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/tearina/todolist/issues"
+  }
+}

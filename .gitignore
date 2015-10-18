@@ -27,7 +27,7 @@ phpunit.phar
 /phpunit.xml
 
 # upload
-/uploads/application/
+/web/upload/
 
 # runtime
 /_protected/runtime/
