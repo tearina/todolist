@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use yii\data\ActiveDataProvider;
 use Yii;
 
 /**
@@ -47,8 +48,17 @@ class Task extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getAttachments()
+    public function getAttachment()
     {
-        return $this->hasMany(Attachment::className(), ['task_id' => 'id']);
+        return $this->hasOne(Attachment::className(), ['task_id' => 'id']);
+    }
+    
+    public static function getTaskList(){
+        $query = self::find()->joinWith(['attachment']);;
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'sort'=> ['defaultOrder' => ['id' => SORT_DESC]]
+        ]);
+        return $dataProvider;
     }
 }
