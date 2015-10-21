@@ -44,10 +44,10 @@ var myanswer = {
     },
     close_modal : function(data){
         $('.modal').modal('hide');
+    },
+    colorBoxes : function(selector) {
+        $(selector).colorbox({rel: 'gal', opacity: 0.5, maxWidth: '700px', maxHeight: '700px', 'photo':true});
     }
-        /*lightBoxes : function(selector) {
-            $(selector).lightBox();
-        }*/
 };
 
 $(document).ready(function() {
@@ -64,4 +64,10 @@ $(document).ready(function() {
         myajax.request(url, null);
         return false;
     });
+    /*$(document).on('mouseover', 'a.gallery', function(){
+        if($(this).data('colorbox') != undefined) {
+            $('.colorbox').colorbox({rel: 'gal', opacity: 0.5, maxWidth: '700px', maxHeight: '700px'});
+        }
+    });*/
+    $("a.gallery").colorbox({rel: 'gal', opacity: 0.5, maxWidth: '700px', maxHeight: '700px', 'photo':true});
 });

@@ -60,9 +60,12 @@ class TaskController extends \yii\web\Controller
                 'model' => $model,
                 'attachment' => $attachment
             ];
-            $html = $this -> renderPartial('_task', $options);
+            $html = '<div class="thumbnail col-sm-12 col-md-12" data-key="' . $model -> id . '">';
+            $html .= $this -> renderPartial('_task', $options);
+            $html .= '</div>';
             $this -> setResult('close_modal', null);
             $this -> setResult('html_prepend', ['selector' => '.task-list', 'html' => $html]);
+            $this -> setResult('colorBoxes', "colorbox");
         }
         else{
             //get create form
