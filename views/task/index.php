@@ -11,7 +11,7 @@ $this->title = 'Todolist';
 ?>
 
 <h1>Список дел</h1>
-
+<a href="/task/create" class="ajax-link">Добавить</a>
 <div class=" application-list">
     <div class="row">
         <?= ListView::widget([
@@ -21,7 +21,7 @@ $this->title = 'Todolist';
             'itemOptions' => ['class' => 'item thumbnail'],
             'itemView' => '_task',
             'layout' => '{items}<div class="clearfix"></div>{pager}',
-            'options' => ['class' => 'col-sm-6 col-md-9']
+            'options' => ['class' => 'task-list col-sm-6 col-md-9']
         ]) ;?>
         <div class="clearfix"></div>
     </div>

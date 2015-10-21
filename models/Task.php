@@ -29,7 +29,7 @@ class Task extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['task'], 'required'],
+            [['task'], 'required', 'message' => 'Необходимо заполнить поле'],
             [['task'], 'string', 'max' => 255]
         ];
     }

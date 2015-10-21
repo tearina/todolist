@@ -16,6 +16,9 @@ use Yii;
  */
 class Attachment extends \yii\db\ActiveRecord
 {
+    const MAX_SIZE_FILE = 5242880;
+    
+    const MAX_SIZE_FILE_MSG = 'Размер файла не должен превышать 5 Мб.';
     /**
      * load task attachment
      * @var attachment
@@ -45,7 +48,7 @@ class Attachment extends \yii\db\ActiveRecord
             [['task_id', 'name'], 'required'],
             [['attachment', 'name', 'is_pic'], 'safe'],
             //[['del_img'], 'boolean'],
-            [['attachment'], 'file', 'maxSize' => 524288, 'checkExtensionByMimeType' => false, 'message' => 'Максимальный размер файла - 5Мб']
+            [['attachment'], 'file', 'maxSize' => self :: MAX_SIZE_FILE, 'checkExtensionByMimeType' => false, 'tooBig' => self :: MAX_SIZE_FILE_MSG]
         ];
     }
 
