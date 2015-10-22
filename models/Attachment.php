@@ -74,11 +74,42 @@ class Attachment extends \yii\db\ActiveRecord
         return parent::beforeSave($insert);
     }
     
+    public function beforeDelete(){
+        if (parent::beforeDelete())
+        {
+            $this -> deleteFile();
+            return true;
+        }
+        return false;
+    }
+    
+    public function deleteFile(){
+        $file = $this -> getUploadPath() . $this -> name;
+        if (file_exists($file)){
+            unlink($this -> getUploadPath() . $this -> name);
+            $this -> attachment = '';
+        }
+    }
+    
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getTask()
     {
         return $this->hasOne(Task::className(), ['id' => 'task_id']);
+    }
+    
+    /**
+     * Get path to upload
+     * @return string
+     */
+    private function getUploadPath()
+    {
+        $path = Yii::getAlias('@webroot') . '/upload/';
+        if (!is_dir($path)){
+            mkdir($path, 0777);
+            chmod($path, 0777);
+        }
+        return $path;
     }
 }

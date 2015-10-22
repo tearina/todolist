@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\models\Attachment;
 use yii\data\ActiveDataProvider;
 use Yii;
 
@@ -45,6 +46,16 @@ class Task extends \yii\db\ActiveRecord
         ];
     }
 
+    public function beforeDelete(){
+        if (parent::beforeDelete())
+        {
+            if ($attachment = Attachment :: findOne(['task_id' => $this -> id]))
+                $attachment -> delete();
+            return true;
+        }
+        return false;
+    }
+    
     /**
      * @return \yii\db\ActiveQuery
      */

@@ -65,7 +65,7 @@ class TaskController extends \yii\web\Controller
             $html .= '</div>';
             $this -> setResult('close_modal', null);
             $this -> setResult('html_prepend', ['selector' => '.task-list', 'html' => $html]);
-            $this -> setResult('colorBoxes', "colorbox");
+            $this -> setResult('colorBoxes', "div.thumbnail[data-key='{$model -> id}'] a.gallery");
         }
         else{
             //get create form
@@ -76,6 +76,16 @@ class TaskController extends \yii\web\Controller
             ];
             $this -> setResult('open_modal', $this->renderAjax('form', $options));
         }
+        return $this -> getResult();
+    }
+    
+    public function actionDelete($id = null){
+        if ($model = Task :: findOne($id)){
+            $model -> delete();
+            $this -> setResult('html_remove', "div[data-key='{$id}']");
+        }
+        else
+            $this -> setResult('alert', 'Не найден элемент');
         return $this -> getResult();
     }
     

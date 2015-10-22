@@ -27,6 +27,9 @@ var myajax = {
 };
 
 var myanswer = {
+    alert : function(msg) {
+        alert(msg);
+    },
     html_remove : function(selector) {
         $(selector).remove();
     },
