@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use yii\web\UploadedFile;
 use Yii;
 
 /**
@@ -16,8 +17,16 @@ use Yii;
  */
 class Attachment extends \yii\db\ActiveRecord
 {
-    const MAX_SIZE_FILE = 5242880;
+    /**
+     * max size for file
+     * @var integer
+     */
+   const MAX_SIZE_FILE = 5242880;
     
+   /**
+    * message for big file
+    * @var string
+    */
     const MAX_SIZE_FILE_MSG = 'Размер файла не должен превышать 5 Мб.';
     /**
      * load task attachment
@@ -47,7 +56,6 @@ class Attachment extends \yii\db\ActiveRecord
         return [
             [['task_id', 'name'], 'required'],
             [['attachment', 'name', 'is_pic'], 'safe'],
-            //[['del_img'], 'boolean'],
             [['attachment'], 'file', 'maxSize' => self :: MAX_SIZE_FILE, 'checkExtensionByMimeType' => false, 'tooBig' => self :: MAX_SIZE_FILE_MSG]
         ];
     }
@@ -63,14 +71,20 @@ class Attachment extends \yii\db\ActiveRecord
             'name' => 'Наименование файла',
             'is_pic' => 'Является картинкой',
             'attachment' => 'Файл',
-            //'del_attachment' => 'Удалить файл'
         ];
     }
 
     public function beforeSave($insert)
     {
+        if (!$file = UploadedFile :: getInstance($this, 'attachment'))
+            return false;
+        //save file
+        $this -> deleteFile();
+        $this -> name = $this -> task_id . '.' . $file -> extension;
+        $file -> saveAs($this -> getUploadPath() . '/' . $this -> name);
+        //type file
         $imgTypes = ['image/jpeg', 'image/jpg', 'image/gif', 'image/png'];
-        $this -> is_pic = (in_array($this -> attachment -> type, $imgTypes)) ? 1 : 0;
+        $this -> is_pic = (in_array($file -> type, $imgTypes)) ? 1 : 0;
         return parent::beforeSave($insert);
     }
     
@@ -85,7 +99,7 @@ class Attachment extends \yii\db\ActiveRecord
     
     public function deleteFile(){
         $file = $this -> getUploadPath() . $this -> name;
-        if (file_exists($file)){
+        if (is_file($file)){
             unlink($this -> getUploadPath() . $this -> name);
             $this -> attachment = '';
         }

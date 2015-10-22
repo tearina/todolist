@@ -5,7 +5,6 @@ namespace app\controllers;
 use app\models\Task;
 use app\models\Attachment;
 use app\models\UploadForm;
-use yii\web\UploadedFile;
 use yii\helpers\Url;
 use Yii;
 
@@ -37,56 +36,98 @@ class TaskController extends \yii\web\Controller
     public function actionIndex()
     {
         $taskList = Task :: getTaskList();
-        
         return $this->render('index', ['taskList' => $taskList]);
     }
+    
     public function actionCreate()
     {
         $model = new Task();
         $attachment = new Attachment();
         if ($model -> load(Yii::$app->request->post())){
             //task create
-            if($file = UploadedFile::getInstance($attachment, 'attachment'))
-                $attachment -> attachment = $file;
-            if ($model->save() && $file){
+            if ($model->save()){
                 //attachment create
                 $attachment -> task_id = $model -> id;
-                $attachment -> name =  $model -> id . '.'. $attachment -> attachment -> extension;
-                if ($attachment -> save())
-                    $file -> saveAs($this->getApplicationPath() . $attachment -> name);
+                $attachment -> save(false);
             }
             //get res
             $options = [
                 'model' => $model,
                 'attachment' => $attachment
             ];
-            $html = '<div class="thumbnail col-sm-12 col-md-12" data-key="' . $model -> id . '">';
-            $html .= $this -> renderPartial('_task', $options);
-            $html .= '</div>';
+            $html = $this -> getListView();
             $this -> setResult('close_modal', null);
-            $this -> setResult('html_prepend', ['selector' => '.task-list', 'html' => $html]);
-            $this -> setResult('colorBoxes', "div.thumbnail[data-key='{$model -> id}'] a.gallery");
+            $this -> setResult('html_replace', ['selector' => '.task-list', 'html' => $html]);
+            $this -> setResult('colorBoxes', "a.gallery");
         }
-        else{
-            //get create form
-            $options = [
-                'model' => $model,
-                'attachment' => $attachment,
-                'formOption' => ['id' => 'task-create-form', 'title' => 'Добавить дело']
-            ];
-            $this -> setResult('open_modal', $this->renderAjax('form', $options));
-        }
+        else
+            $this -> setResult('open_modal', $this-> getForm($model, $attachment));
         return $this -> getResult();
     }
     
-    public function actionDelete($id = null){
+    public function actionEdit($id = null)
+    {
         if ($model = Task :: findOne($id)){
-            $model -> delete();
-            $this -> setResult('html_remove', "div[data-key='{$id}']");
+            if (!$attachment = $model -> attachment)
+                $attachment = new Attachment();
+            if ($model -> load(Yii::$app->request->post())){
+                //task create
+                if ($model->save()){
+                    //attachment create
+                    $attachment -> task_id = $model -> id;
+                    $attachment -> save(false);
+                }
+                //get res
+                $options = [
+                'model' => $model,
+                'attachment' => $attachment
+                ];
+                $html = $this -> getListView();
+                $this -> setResult('close_modal', null);
+                $this -> setResult('html_replace', ['selector' => '.task-list', 'html' => $html]);
+                $this -> setResult('colorBoxes', "a.gallery");
+            }
+            else
+                $this -> setResult('open_modal', $this-> getForm($model, $attachment));
         }
         else
             $this -> setResult('alert', 'Не найден элемент');
         return $this -> getResult();
+     }
+    
+    public function actionDelete($id = null){
+        if ($model = Task :: findOne($id)){
+            $model -> delete();
+            $html = $this -> getListView();
+            $this -> setResult('html_replace', ['selector' => '.task-list', 'html' => $html]);
+        }
+        else
+            $this -> setResult('alert', 'Не найден элемент');
+        return $this -> getResult();
+    }
+    
+    /**
+     * get create and update task form
+     * @param app\models\Task $model
+     * @param app\models\Attachment $attachment
+     * @return string
+     */
+    private function getForm($model, $attachment){
+        $options = [
+            'model' => $model,
+            'attachment' => $attachment,
+            'formOption' => ['id' => 'task-create-form', 'title' => 'Добавить дело']
+        ];
+        return $this->renderAjax('form', $options);
+    }
+    
+    /**
+     * get task list
+     * @return string
+     */
+    private function getListView(){
+        $taskList = Task :: getTaskList();
+        return $this->renderPartial('_list', ['taskList' => $taskList]);
     }
     
     /**

@@ -1,14 +1,15 @@
 <?php
 use yii\helpers\Url;
 
-
 /* @var $model yii\web\Task*/
 ?>
 
 <div class="task">
-<!--<a href="<?= Url::to(['application/view', 'id' => $model -> id]) ?>">  -->
-<a class="ajax-link delete pull-right" href="<?= Url::to(['task/delete', 'id' => $model -> id]) ?>">
+    <a class="ajax-link control pull-right" href="<?= Url::to(['task/delete', 'id' => $model -> id]) ?>">
         <span class="glyphicon glyphicon-remove"></span>
+    </a>
+    <a class="ajax-link control pull-right" href="<?= Url::to(['task/edit', 'id' => $model -> id]) ?>">
+        <span class="glyphicon glyphicon-pencil"></span>
     </a>
     <span><?= $model -> task ?></span>
     <?php if ($model -> attachment) :?>
@@ -24,6 +25,5 @@ use yii\helpers\Url;
         <?php endif;?>
         </div>
     <?php endif;?>
-    
-<!-- </a>  -->
 </div>
+

@@ -23,7 +23,8 @@ h1{
     border: 0;
 }
 
-.delete{
+.control{
+    margin: 0 5px;
     color: #000;
 }
 

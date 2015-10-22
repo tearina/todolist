@@ -36,6 +36,9 @@ var myanswer = {
     html_prepend : function(data) {
         $(data.selector).prepend(data.html);
     },
+    html_replace: function(data){
+        $(data.selector).replaceWith(data.html);
+    },
     reload : function(data){
         location.reload(); 
     },
@@ -67,10 +70,5 @@ $(document).ready(function() {
         myajax.request(url, null);
         return false;
     });
-    /*$(document).on('mouseover', 'a.gallery', function(){
-        if($(this).data('colorbox') != undefined) {
-            $('.colorbox').colorbox({rel: 'gal', opacity: 0.5, maxWidth: '700px', maxHeight: '700px'});
-        }
-    });*/
     $("a.gallery").colorbox({rel: 'gal', opacity: 0.5, maxWidth: '700px', maxHeight: '700px', 'photo':true});
 });

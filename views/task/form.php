@@ -2,11 +2,12 @@
     use yii\helpers\Html;
     use yii\widgets\ActiveForm;
 
-    /* @var $this yii\web\View */
-    /* @var $model app\models\Task */
-    /* @var $attachment app\models\Attachment */
-    /* @var $form yii\widgets\ActiveForm */
-    /* @var $role app\rbac\models\Role; */
+    /* @var $this yii\web\View
+     * @var $model app\models\Task
+     * @var $attachment app\models\Attachment
+     * @var $form yii\widgets\ActiveForm
+     * @var $role app\rbac\models\Role;
+     */
 ?>
 <div class="modal-dialog">
     <?php $form = ActiveForm::begin(['id' => $formOption['id'], 'options' => ['enctype' => 'multipart/form-data', 'class' => 'form ajax_form']]) ?>
@@ -28,8 +29,8 @@
                ]) -> fileInput() ?>
         </div>
         <div class="modal-footer">
-            <?= Html::submitButton(Yii::t('app', 'Закрывать'), ['class' => 'btn btn-default', 'data-dismiss' => 'modal']) ?>
-            <?= Html::submitButton(Yii::t('app', 'Создать'), ['class' => 'btn btn-primary sendForm']) ?>
+            <?= Html::submitButton(Yii::t('app', 'Закрыть'), ['class' => 'btn btn-default', 'data-dismiss' => 'modal']) ?>
+            <?= Html::submitButton(Yii::t('app', 'Сохранить'), ['class' => 'btn btn-primary sendForm']) ?>
         </div>
     </div>
     <?php ActiveForm::end(); ?>
