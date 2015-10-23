@@ -4,7 +4,6 @@ namespace app\controllers;
 
 use app\models\Task;
 use app\models\Attachment;
-use app\models\UploadForm;
 use yii\helpers\Url;
 use Yii;
 
@@ -14,15 +13,21 @@ class TaskController extends \yii\web\Controller
      * res array
      * @var array
      */
-    private $res;
+    private $res = [
+        'error' => null,
+        'data' => null
+    ];
     
     /**
      * set result to send
-     * @param string $event event name
      * @param string|integer $param event data
+     * @param boolean $success operation success
      */
-    private function setResult($event, $param){
-        $this -> res[$event] = $param;
+    private function setResult($param, $success = true){
+        if ($success)
+            $this -> res['data'] = $param;
+        else
+            $this -> res['error'] = $param;
     }
     
     /**
@@ -49,19 +54,19 @@ class TaskController extends \yii\web\Controller
                 //attachment create
                 $attachment -> task_id = $model -> id;
                 $attachment -> save(false);
+                //
+                $options = [
+                    'model' => $model,
+                    'attachment' => $attachment
+                ];
+                $this -> setResult($this -> getListView());
             }
-            //get res
-            $options = [
-                'model' => $model,
-                'attachment' => $attachment
-            ];
-            $html = $this -> getListView();
-            $this -> setResult('close_modal', null);
-            $this -> setResult('html_replace', ['selector' => '.task-list', 'html' => $html]);
-            $this -> setResult('colorBoxes', "a.gallery");
+            else
+                $this -> setResult('Не удалось добавить задачу', false);
         }
         else
-            $this -> setResult('open_modal', $this-> getForm($model, $attachment));
+            //get create form
+            $this -> setResult($this-> getForm($model, $attachment));
         return $this -> getResult();
     }
     
@@ -76,33 +81,34 @@ class TaskController extends \yii\web\Controller
                     //attachment create
                     $attachment -> task_id = $model -> id;
                     $attachment -> save(false);
+                    //
+                    $options = [
+                        'model' => $model,
+                        'attachment' => $attachment
+                    ];
+                    $this -> setResult($this -> getListView());
                 }
-                //get res
-                $options = [
-                'model' => $model,
-                'attachment' => $attachment
-                ];
-                $html = $this -> getListView();
-                $this -> setResult('close_modal', null);
-                $this -> setResult('html_replace', ['selector' => '.task-list', 'html' => $html]);
-                $this -> setResult('colorBoxes', "a.gallery");
+                else
+                    $this -> setResult('Не удалось изменить данные', false);
             }
             else
-                $this -> setResult('open_modal', $this-> getForm($model, $attachment));
+                //get edit form
+                $this -> setResult($this-> getForm($model, $attachment));
         }
         else
-            $this -> setResult('alert', 'Не найден элемент');
+            $this -> setResult('error', 'Не найдена задача');
         return $this -> getResult();
      }
     
     public function actionDelete($id = null){
         if ($model = Task :: findOne($id)){
-            $model -> delete();
-            $html = $this -> getListView();
-            $this -> setResult('html_replace', ['selector' => '.task-list', 'html' => $html]);
+            if ($model -> delete())
+                $this -> setResult($this -> getListView());
+            else
+                $this -> setResult('Не удалось удалить задачу', false);
         }
         else
-            $this -> setResult('alert', 'Не найден элемент');
+            $this -> setResult('Не найдена задача', false);
         return $this -> getResult();
     }
     

@@ -9,7 +9,7 @@
     <div class="row">
         <?= ListView::widget([
             'summary' => false,
-            'emptyText' => 'Дел нет',
+            'emptyText' => 'Задач нет',
             'dataProvider' => $taskList,
             'itemOptions' => ['class' => 'thumbnail col-sm-12 col-md-12'],
             'itemView' => '_task',

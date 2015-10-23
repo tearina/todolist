@@ -17,8 +17,8 @@ echo Colorbox::widget([
 ])
 ?>
 
-<h1>Список дел</h1>
-<a href="/task/create" class="ajax-link task-create btn btn-primary pull-right">Добавить</a>
+<h1>Список задач</h1>
+<a href="/task/create" class="ajax-link task-create btn btn-primary pull-right" data-type="open_modal">Добавить</a>
 
 <!-- task list -->
 <?= $this -> render('_list', ['taskList' => $taskList])?>
